@@ -1,6 +1,6 @@
 # rwk20
 
-A new Flutter application.
+A simple flutter app for RCFFUTA members and alumni to preorder RW'20 branded wears and stationery.
 
 ## Getting Started
 
