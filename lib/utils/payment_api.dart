@@ -8,7 +8,7 @@ class PaymentApi {
   static const String verify =
       "https://api.paystack.co/transaction/verify/:reference";
   static const String skTest =
-      "sk_test_79ff15aac709aeed992e2a13349a678ac492d68c";
+      "sk_live_a218b9ffd29b6bb8188a0c0665cf26573a341d80";
   static const String callbackUrl = "https://rcffuta.org";
 
   static Map<String, String> headers(String skTest) => {

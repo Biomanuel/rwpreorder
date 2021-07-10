@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:rwk20/ui/views/home_view.dart';
 
 void main() async {
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
               theme: ThemeData(
                 primarySwatch: Colors.orange,
               ),
-              home: HomeView(),
+              home: OKToast(child: HomeView()),
             );
           }
 
