@@ -22,6 +22,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  bool initPageVisible = true;
+  bool nextPageVisibility = false;
+  String selectedPackage = 'Premium Package';
+
   Order order = Order();
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
@@ -42,6 +46,7 @@ class _HomeViewState extends State<HomeView> {
   String size = "Small";
   String package = "Premium package";
   double price = 3500.0;
+  double charges = 10.0;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -61,273 +66,35 @@ class _HomeViewState extends State<HomeView> {
           body: Center(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
+                children: [
+                  Stack(
+                    children: [
+                      orderSummary(context),
+                      initialPage(),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Material(
-                      // textStyle: TextStyle(color: Colors.white),
-                      color: Colors.grey.shade200,
-                      elevation: 8,
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        width: mobileWidthLimit,
-                        margin: const EdgeInsets.all(10),
-                        child: BaseWidget(
-                          builder: (context, sizingInfo) {
-                            SizingInformation si = sizingInfo;
-                            return SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  PackagePreviewSlide(),
-                                  Form(
-                                    key: formKey,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Kindly fill the following details',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(20.0),
-                                                child: Container(
-                                                  child: Column(children: [
-                                                    Row(children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          'Color:',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: DropdownButton(
-                                                            isExpanded: true,
-                                                            items:
-                                                                List.generate(
-                                                                    colors
-                                                                        .length,
-                                                                    (index) =>
-                                                                        DropdownMenuItem(
-                                                                          child:
-                                                                              Text("${colors[index]}"),
-                                                                          value:
-                                                                              colors[index],
-                                                                        )),
-                                                            value: color,
-                                                            onChanged: (value) {
-                                                              setState(() {
-                                                                color = value;
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Container()),
-                                                    ]),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            'Package:',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child:
-                                                                DropdownButton(
-                                                              isExpanded: true,
-                                                              items:
-                                                                  List.generate(
-                                                                      packages
-                                                                          .length,
-                                                                      (index) =>
-                                                                          DropdownMenuItem(
-                                                                            child:
-                                                                                Text("${packages[index]}"),
-                                                                            value:
-                                                                                packages[index],
-                                                                          )),
-                                                              value: package,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(() {
-                                                                  package =
-                                                                      value;
-                                                                  switch (
-                                                                      value) {
-                                                                    case 'Premium package':
-                                                                      price =
-                                                                          3500.00;
-                                                                      break;
-                                                                    case 'Shirt and free nose mask':
-                                                                      price =
-                                                                          2500.00;
-                                                                      break;
-                                                                    case 'cap':
-                                                                      price =
-                                                                          1000.00;
-                                                                      break;
-                                                                    case 'Pen & Jotter':
-                                                                      price =
-                                                                          500.00;
-                                                                      break;
-                                                                    default:
-                                                                      price =
-                                                                          0.00;
-                                                                  }
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            "\u20A6 $price",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .green,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 16),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            'Size:',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child:
-                                                                DropdownButton(
-                                                              isExpanded: true,
-                                                              items:
-                                                                  List.generate(
-                                                                      sizes
-                                                                          .length,
-                                                                      (index) =>
-                                                                          DropdownMenuItem(
-                                                                            child:
-                                                                                Text("${sizes[index]}"),
-                                                                            value:
-                                                                                sizes[index],
-                                                                          )),
-                                                              value: size,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(() {
-                                                                  size = value;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                            flex: 1,
-                                                            child: Container()),
-                                                      ],
-                                                    ),
-                                                  ]),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        InputField(
-                                          label: "Full Name",
-                                          controller: nameController,
-                                        ),
-                                        InputField(
-                                          label: "Phone Number",
-                                          controller: phoneController,
-                                        ),
-                                        InputField(
-                                          label: "Email Address",
-                                          controller: emailController,
-                                        ),
-                                        InputField(
-                                          label: "Location",
-                                          controller: locationController,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      await submitForm(context);
-                                                    },
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      child: Text(
-                                                        "Pay Now",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+                    child: Visibility(
+                      visible: initPageVisible,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              // orderPage.isVisible =!orderPage.isVisible;
+                              // initPageVisible = !initPageVisible;
+                              initPageVisible = !initPageVisible;
+                              nextPageVisibility = !nextPageVisibility;
+                            });
+
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => OrderSummary()));
                           },
-                        ),
-                      ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              "Proceed",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          )),
                     ),
                   ),
                 ],
@@ -336,6 +103,459 @@ class _HomeViewState extends State<HomeView> {
           ),
         );
       },
+    );
+  }
+
+  Center orderSummary(BuildContext context) {
+    return Center(
+      child: Visibility(
+        visible: nextPageVisibility,
+        maintainAnimation: true,
+        maintainSize: true,
+        maintainState: true,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Order Summary',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          initPageVisible = !initPageVisible;
+                          nextPageVisibility = !nextPageVisibility;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Package Details',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('$selectedPackage'),
+                                    Text('\u20A6${price.toString()}', style: TextStyle(fontWeight: FontWeight.w600),),
+
+                                  ],
+                                ),
+                                Divider(),
+
+                               YourDetails(),
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Center(
+                                    child: Text('kindly confirm your details before proceeding to pay', style: TextStyle(color: Colors.grey, fontSize: 10 ),),
+                                  ),
+                                )
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Charges'),
+                      Text(charges.toString()),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        '\u20A6${charges+price}',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                ])),
+              ),
+              Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => OrderSummary()));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        "Pay now",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding YourDetails() {
+    return Padding(
+                               padding: const EdgeInsets.all(10.0),
+                               child: Column(
+                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                 children:[
+                                   Text('Your details', style: TextStyle(fontWeight: FontWeight.w600),),
+                                   SizedBox(
+                                     height: 10,
+                                   ),
+                                   Container(
+                                     margin: EdgeInsets.only(bottom: 10),
+                                     child: Row(
+                                 children: [
+                                     Text('Name:'),
+                                     Container(
+                                         margin: EdgeInsets.only(left: 10),
+                                         child: Text(nameController.text)),
+                                 ]
+                               ),
+                                   ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                      children: [
+                                        Text('Email:'),
+                                        Container(margin: EdgeInsets.only(left: 10),
+                                            child: Text(emailController.text)),
+                                      ]
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                      children: [
+                                        Text('Tel:'),
+                                        Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(phoneController.text)),
+                                      ]
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                      children: [
+                                        Text('Name:'),
+                                        Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(nameController.text)),
+                                      ]
+                                  ),
+                                ),
+                                Row(
+                                    children: [
+                                      Text('Location:'),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 10),
+                                          child: Text(locationController.text)),
+                                    ]
+                                ),
+                                ]),
+                             );
+  }
+
+  Center initialPage() {
+    return Center(
+      child: Visibility(
+        visible: initPageVisible,
+        child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Material(
+                  // textStyle: TextStyle(color: Colors.white),
+                  color: Colors.grey.shade200,
+                  elevation: 8,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: mobileWidthLimit,
+                    margin: const EdgeInsets.all(10),
+                    child: BaseWidget(
+                      builder: (context, sizingInfo) {
+                        SizingInformation si = sizingInfo;
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              PackagePreviewSlide(),
+                              Form(
+                                key: formKey,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'Kindly fill the following details',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Container(
+                                              child: Column(children: [
+                                                Row(children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      'Color:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: DropdownButton(
+                                                        isExpanded: true,
+                                                        items: List.generate(
+                                                            colors.length,
+                                                            (index) =>
+                                                                DropdownMenuItem(
+                                                                  child: Text(
+                                                                      "${colors[index]}"),
+                                                                  value: colors[
+                                                                      index],
+                                                                )),
+                                                        value: color,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            color = value;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                      flex: 1,
+                                                      child: Container()),
+                                                ]),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        'Package:',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: DropdownButton(
+                                                          isExpanded: true,
+                                                          items: List.generate(
+                                                              packages.length,
+                                                              (index) =>
+                                                                  DropdownMenuItem(
+                                                                    child: Text(
+                                                                        "${packages[index]}"),
+                                                                    value: packages[
+                                                                        index],
+                                                                  )),
+                                                          value: package,
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              package = value;
+                                                              selectedPackage =
+                                                                  package;
+                                                              switch (value) {
+                                                                case 'Premium package':
+                                                                  price =
+                                                                      3500.00;
+                                                                  break;
+                                                                case 'Shirt and free nose mask':
+                                                                  price =
+                                                                      2500.00;
+                                                                  break;
+                                                                case 'cap':
+                                                                  price =
+                                                                      1000.00;
+                                                                  break;
+                                                                case 'Pen & Jotter':
+                                                                  price =
+                                                                      500.00;
+                                                                  break;
+                                                                default:
+                                                                  price = 0.00;
+                                                              }
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        "\u20A6 $price",
+                                                        style: TextStyle(
+                                                            color: Colors.green,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        'Size:',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: DropdownButton(
+                                                          isExpanded: true,
+                                                          items: List.generate(
+                                                              sizes.length,
+                                                              (index) =>
+                                                                  DropdownMenuItem(
+                                                                    child: Text(
+                                                                        "${sizes[index]}"),
+                                                                    value: sizes[
+                                                                        index],
+                                                                  )),
+                                                          value: size,
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              size = value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Container()),
+                                                  ],
+                                                ),
+                                              ]),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    InputField(
+                                      label: "Full Name",
+                                      controller: nameController,
+                                    ),
+                                    InputField(
+                                      label: "Phone Number",
+                                      controller: phoneController,
+                                    ),
+                                    InputField(
+                                      label: "Email Address",
+                                      controller: emailController,
+                                    ),
+                                    InputField(
+                                      label: "Location",
+                                      controller: locationController,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
